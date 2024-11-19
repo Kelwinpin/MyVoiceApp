@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Platform, StatusBar, View, ScrollView } from 'react-native';
+import { Image, StyleSheet, Platform, StatusBar, View, ScrollView, TouchableOpacity } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { Card } from '@/components/Card';
@@ -6,6 +6,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 export { Link } from 'expo-router';
 import axios from 'axios';
 import React from 'react';
+import { useRouter } from 'expo-router';
 
 export default function HomeScreen() {
   const queryClient = useQueryClient();
@@ -20,27 +21,44 @@ export default function HomeScreen() {
     queryFn: () => axios.get(`http://192.168.4.2:3000/activitySubTypes/`).then((res) => res.data).catch((err) => err)
   });
 
-  const filterActivityTypes = (id: any) => {
-    return activitySubTypes?.filter((activitySubType) => activitySubType.activityTypeId === id);
+  const filterActivityTypes = (id: number) => {
+    if (!activitySubTypes) return [];
+    return activitySubTypes.filter((activitySubType: { activityTypeId: number; }) => activitySubType.activityTypeId === id);
   };
 
+  const router = useRouter();
+
+  const navigateToScreen = (id: number) => {
+    router.push({
+      pathname: '/activity',
+      params: { id: id},
+    });
+  };
+  
   return (
     <>
-      <StatusBar barStyle="dark-content" />
       <ThemedView style={styles.container}>
+        <StatusBar barStyle="dark-content" />
         <ThemedView style={styles.titleContainer}>
           <View style={styles.stepContainer}>
             <ScrollView>
-              {activityTypes?.map((activityType) => (
+              {activityTypes?.map((activityType: { id: number; name: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined; }) => (
                 <View key={`type-${activityType.id}`}>
                   <ThemedText type="title">{activityType.name}</ThemedText>
                   <View style={styles.separator}></View>
                   <View style={styles.rowContainer}>
-                    {filterActivityTypes(activityType.id)?.map((activitySubType) => (
-                        <Card key={`subtype-${activitySubType.id}`} >
+                    {filterActivityTypes(activityType.id)?.map((activitySubType: 
+                    { id: any; image: any; name: string | number | boolean | 
+                      React.ReactElement<any, string | 
+                      React.JSXElementConstructor<any>> | 
+                      Iterable<React.ReactNode> | React.ReactPortal | null | undefined; 
+                    }) => (
+                      <TouchableOpacity key={`subtype-${activitySubType.id}`} onPress={() => navigateToScreen(activitySubType.id)}>
+                        <Card>
                           <Image source={{ uri: activitySubType.image }} style={styles.image} />
                           <ThemedText type="subtitle">{activitySubType.name}</ThemedText>
                         </Card>
+                      </TouchableOpacity>
                     ))}
                   </View>
                 </View>
@@ -57,7 +75,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'flex-start',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
   },
   titleContainer: {
     flexDirection: 'row',
