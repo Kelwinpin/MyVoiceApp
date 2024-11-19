@@ -42,9 +42,7 @@ export default function RootLayout() {
             { 
               headerShown: true, 
               headerTitle: '', 
-              headerStyle: { backgroundColor: '#09c7e0' },
-              headerTintColor: '#FFFFFF',
-
+              headerStyle: { backgroundColor: '#09c7e0' }
             }
           } />
         </Stack>
