@@ -5,6 +5,7 @@ import { Card } from '@/components/Card';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 export { Link } from 'expo-router';
 import axios from 'axios';
+import React from 'react';
 
 export default function HomeScreen() {
   const queryClient = useQueryClient();
@@ -19,7 +20,7 @@ export default function HomeScreen() {
     queryFn: () => axios.get(`http://192.168.4.2:3000/activitySubTypes/`).then((res) => res.data).catch((err) => err)
   });
 
-  const filterActivityTypes = (id) => {
+  const filterActivityTypes = (id: any) => {
     return activitySubTypes?.filter((activitySubType) => activitySubType.activityTypeId === id);
   };
 
