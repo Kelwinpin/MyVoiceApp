@@ -1,41 +1,59 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import { ScrollView, StatusBar, StyleSheet, TouchableOpacity, View, Image } from "react-native";
+import {
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  Image,
+} from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import { Card } from "@/components/Card";
 import { Audio } from "expo-av";
 
-export default function ActivityScreen() {
-  const { id } = useLocalSearchParams();
-  const [sound, setSound] = useState(null);
+interface Activity {
+  id: string;
+  description: string;
+  sound: string;
+  image: string;
+}
 
-  const { data: activities } = useQuery({
+export default function ActivityScreen() {
+  const { id } = useLocalSearchParams<{ id?: string }>();
+
+  const [sound, setSound] = useState<Audio.Sound | null>(null);
+
+  const { data: activities } = useQuery<Activity[]>({
     queryKey: ["activities"],
-    queryFn: () =>
+    queryFn: async () =>
       axios
-        .get(`http://192.168.4.2:3000/activities/subType/${id}`)
+        .get(`http://myvoice-production.up.railway.app/activities/subType/${id}`)
         .then((res) => res.data)
-        .catch((err) => err),
+        .catch((err) => {
+          console.error("Erro ao buscar atividades:", err);
+          return [];
+        }),
   });
 
-  const playAudio = async () => {
+  // Reproduzir áudio
+  const playAudio = async (audioPath: string) => {
     try {
-      const audioPath = 'https://firebasestorage.googleapis.com/v0/b/pocs-c1c24.firebasestorage.app/o/WhatsApp-Ptt-2024-11-18-at-22.33.16.mp3?alt=media&token=ff524051-3380-481e-8b47-b32b00b39e00'
       if (!audioPath) {
         console.error("Nenhum caminho de áudio fornecido.");
         return;
       }
 
-      // Liberar som anterior antes de carregar um novo
       if (sound) {
         await sound.unloadAsync();
       }
 
-      // Carregar e reproduzir o som
-      const { sound: newSound } = await Audio.Sound.createAsync({ uri: audioPath });
+      const { sound: newSound } = await Audio.Sound.createAsync({
+        uri: audioPath,
+      });
       setSound(newSound);
       await newSound.playAsync();
     } catch (error) {
@@ -43,9 +61,12 @@ export default function ActivityScreen() {
     }
   };
 
-  // Liberar o som ao desmontar o componente
-  React.useEffect(() => {
-    return sound ? () => sound.unloadAsync() : undefined;
+  useEffect(() => {
+    return () => {
+      if (sound) {
+        sound.unloadAsync();
+      }
+    };
   }, [sound]);
 
   return (
@@ -57,7 +78,7 @@ export default function ActivityScreen() {
             {activities?.map((activity) => (
               <TouchableOpacity
                 key={`activity-${activity.id}`}
-                onPress={() => playAudio(activity.audioPath)} // Passa o caminho do áudio
+                onPress={() => playAudio(activity.sound)} // Passa o caminho do áudio
               >
                 <Card type="activity">
                   <Image source={{ uri: activity.image }} style={styles.image} />

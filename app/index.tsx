@@ -13,12 +13,12 @@ export default function HomeScreen() {
 
   const { data: activityTypes } = useQuery({
     queryKey: ['activityTypes'],
-    queryFn: () => axios.get("http://192.168.4.2:3000/activityTypes/").then((res) => res.data).catch((err) => err)
+    queryFn: () => axios.get("http://myvoice-production.up.railway.app/activityTypes/").then((res) => res.data).catch((err) => err)
   });
 
   const { data: activitySubTypes } = useQuery({
     queryKey: ['activitySubTypes'],
-    queryFn: () => axios.get(`http://192.168.4.2:3000/activitySubTypes/`).then((res) => res.data).catch((err) => err)
+    queryFn: () => axios.get(`http://myvoice-production.up.railway.app/activitySubTypes/`).then((res) => res.data).catch((err) => err)
   });
 
   const filterActivityTypes = (id: number) => {
