@@ -39,7 +39,6 @@ export default function ActivityScreen() {
         }),
   });
 
-  // Reproduzir áudio
   const playAudio = async (audioPath: string) => {
     try {
       if (!audioPath) {
