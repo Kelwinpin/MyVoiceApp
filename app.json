@@ -14,9 +14,12 @@
       "backgroundColor": "#5D8E8E"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "br.com.myvoice"
     },
     "android": {
+      "versionCode": 1,
+      "package": "br.com.myvoice",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#5D8E8E"
@@ -32,6 +35,14 @@
     },
     "plugins": [
       "expo-router"
-    ]
+    ],
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "e27f2303-61e7-40b9-a51c-bef38e5e6c66"
+      }
+    }
   }
 }
