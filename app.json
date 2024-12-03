@@ -20,7 +20,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#5D8E8E"
-      }
+      },
+      "package": "com.kelwincbc.myVoice"
     },
     "web": {
       "bundler": "metro",
@@ -32,6 +33,14 @@
     },
     "plugins": [
       "expo-router"
-    ]
+    ],
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "9fba8cc8-096a-484c-9c20-14c7b6867d4a"
+      }
+    }
   }
 }
