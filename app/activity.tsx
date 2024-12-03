@@ -31,7 +31,7 @@ export default function ActivityScreen() {
     queryKey: ["activities"],
     queryFn: async () =>
       axios
-        .get(`http://myvoice-production.up.railway.app/activities/subType/${id}`)
+        .get(`https://myvoice-production.up.railway.app/activities/subType/${id}`)
         .then((res) => res.data)
         .catch((err) => {
           console.error("Erro ao buscar atividades:", err);
