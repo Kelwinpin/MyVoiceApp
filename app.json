@@ -23,8 +23,7 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#5D8E8E"
-      },
-      "package": "com.kelwincbc.myVoice"
+      }
     },
     "web": {
       "bundler": "metro",
