@@ -14,9 +14,12 @@
       "backgroundColor": "#5D8E8E"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "br.com.myvoice"
     },
     "android": {
+      "versionCode": 1,
+      "package": "br.com.myvoice",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#5D8E8E"
